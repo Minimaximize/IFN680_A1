@@ -100,7 +100,7 @@ def test_particle_filter_search():
     if True:
         # use image 1
         imf, imd , pat_list, pose_list = pattern_utils.make_test_image_1(True)
-        ipat = 2 # index of the pattern to target
+        ipat = 0 # index of the pattern to target
     else:
         # use image 2
         imf, imd , pat_list, pose_list = pattern_utils.make_test_image_2(True)
@@ -113,13 +113,14 @@ def test_particle_filter_search():
     region = (xs-20, xs+20, ys-20, ys+20)
     scale = pose_list[ipat][3]
         
-    pop_size=30
+    pop_size=5
     W = initial_population(region, scale , pop_size)
     
     pop = PatternPosePopulation(W, pat)
     pop.set_distance_image(imd)
     
     pop.temperature = 5
+    # 5 x 10 / 5 x 20 / 5 x 30 /
     
     Lw, Lc = pop.particle_filter_search(40,log=True)
     
@@ -143,6 +144,8 @@ def test_particle_filter_search():
 #------------------------------------------------------------------------------        
 
 if __name__=='__main__':
+    test_particle_filter_search()
+
     test_particle_filter_search()
     
     
