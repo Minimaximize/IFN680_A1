@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 
 import pattern_utils
 import population_search
-
+import os
+import logging
 #------------------------------------------------------------------------------
 
 class PatternPosePopulation(population_search.Population):
@@ -91,16 +92,31 @@ def initial_population(region, scale = 10, pop_size=20):
     return W
 
 #------------------------------------------------------------------------------        
-def test_particle_filter_search():
+def test_particle_filter_search(generation,individuals, IndexPattern, times):
     '''
     Run the particle filter search on test image 1 or image 2of the pattern_utils module
     
     '''
+    testname = str(times) +':'+ str(IndexPattern) + ':'+ str(generation) + ' x ' + str(individuals)    
+    Testlogfile = str(times) +'-'+ str(IndexPattern) + '-'+ str(generation) + '_x_' + str(individuals)
+    print(testname) 
     
+    if os.path.exists('log') is False:
+        os.mkdir('log')  
+ 
+    logfile =  str(IndexPattern) + '-'+ str(generation) + '_x_' + str(individuals)+'.log'
+    log_path = os.path.join('log',logfile)
+    log_level = logging.DEBUG 
+    log_format = '%(message)s'
+    logger = logging.root
+    logger.basicConfig = logging.basicConfig(format=log_format, filename=log_path, level=log_level)  
+    logger.debug(testname)  
+
+
     if True:
         # use image 1
         imf, imd , pat_list, pose_list = pattern_utils.make_test_image_1(True)
-        ipat = 0 # index of the pattern to target
+        ipat = IndexPattern # index of the pattern to target
     else:
         # use image 2
         imf, imd , pat_list, pose_list = pattern_utils.make_test_image_2(True)
@@ -113,24 +129,28 @@ def test_particle_filter_search():
     region = (xs-20, xs+20, ys-20, ys+20)
     scale = pose_list[ipat][3]
         
-    pop_size=5
+    pop_size=individuals
     W = initial_population(region, scale , pop_size)
     
     pop = PatternPosePopulation(W, pat)
     pop.set_distance_image(imd)
     
     pop.temperature = 5
+    if os.path.exists('out') is False:
+        os.mkdir('out') 
     # 5 x 10 / 5 x 20 / 5 x 30 /
     
-    Lw, Lc = pop.particle_filter_search(40,log=True)
+    Lw, Lc = pop.particle_filter_search(generation,log=True)
     
     plt.plot(Lc)
-    plt.title('Cost vs generation index')
-    plt.show()
+    plt.title('Cost vs generation index')	
+    plt.savefig(r'out\\Cost_Vs_Generation.png')
+   #plt.show()
     
-    print(pop.best_w)
-    print(pop.best_cost)
-    
+    #print(pop.best_w)
+    #print(pop.best_cost)
+    logger.debug(pop.best_w)
+    logger.debug(pop.best_cost)
         
     pattern_utils.display_solution(pat_list, 
                       pose_list, 
@@ -141,14 +161,173 @@ def test_particle_filter_search():
                       pose_list, 
                       pat,
                       Lw)
+    os.rename('out', str(times)+'_'+ str(IndexPattern)+'_'+str(generation)+'_'+str(individuals)) 
+    
 #------------------------------------------------------------------------------        
 
 if __name__=='__main__':
-    test_particle_filter_search()
+    
+    
+    Reverse_flag = False    
+ 
+    generation1 =200
+    individuals1= 5 
+    # the 1st option: 200 generation for a population of 5 individuals 
+    generation2 =8
+    individuals2 = 125 # the 2nd option: 8 generation for a population of 125 individuals 
+    
+    generation3 =20
+    individuals3 = 50  # the 3rd option: 20 generation for a population of 50 individuals 
+    
+    generation4 =25
+    individuals4 = 40  # the 4th option: 25 generation for a population of 40 individuals 
 
-    test_particle_filter_search()
+
+# reverse 
+    generation_r1 =5
+    individuals_r1= 200 
+    
+    generation_r2 =125
+    individuals_r2 = 8 
+    
+    generation_r3 =50
+    individuals_r3 = 20 
+    
+    generation_r4 =40
+    individuals_r4 = 25 
+
+
+#############################################################################################
+   
+ 
+    
+    if Reverse_flag is False : 
+        print ('Reverse_flag is false')        
+         
+        IndexPattern =0
+        for i in range(10):
+           test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
+    '''  
+        for i in range(10):
+            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
+            
+        for i in range(10):  
+             test_particle_filter_search(generation3,individuals3, IndexPattern,i)  
+             
+        for i in range(10): 
+            test_particle_filter_search(generation4,individuals4, IndexPattern,i)  
+        
+        IndexPattern =1
+        for i in range(10): 
+            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
+        
+        for i in range(10): 
+            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
+        
+        for i in range(10): 
+           test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
+        
+        for i in range(10): 
+           test_particle_filter_search(generation4,individuals4, IndexPattern,i) 
+
+    
+        IndexPattern =2
+    
+        for i in range(10): 
+            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
+        
+        for i in range(10): 
+            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
+        
+        for i in range(10): 
+            test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
+        
+        for i in range(10): 
+            test_particle_filter_search(generation4,individuals4, IndexPattern,i)      
+    
+      
+        IndexPattern =3
+    
+        for i in range(10): 
+            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
+        
+        for i in range(10): 
+            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
+        
+        for i in range(10): 
+            test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
+        
+        for i in range(10): 
+            test_particle_filter_search(generation4,individuals4, IndexPattern,i)
+    '''
+    
+############################################################################################
+
+    if Reverse_flag is True:
+        print ('Reverse_flag is true')
+ 
+
+        IndexPattern =0
+
+        for i in range(10):    
+            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
+    
+        for i in range(10):    
+            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
+        
+        for i in range(10):    
+             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)
     
     
+        IndexPattern =1
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
+        
+        for i in range(10):    
+             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)   
+
+        IndexPattern =2
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
+        
+        for i in range(10):    
+             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i) 
+
+    
+        IndexPattern =3
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
+        
+        for i in range(10):    
+            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
+        
+        for i in range(10):    
+             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)
+   
+    
+#############################################################################################
+
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                               CODE CEMETARY        
     
