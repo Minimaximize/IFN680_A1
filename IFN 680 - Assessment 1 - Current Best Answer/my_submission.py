@@ -43,6 +43,7 @@ class PatternPosePopulation(population_search.Population):
            best cost of this generation            
         
         '''
+        self.best_w = self.W[0].copy()
         for i in range(len(self.C)):#for every element in the hight of the matrix
             self.C[i], temp = self.pat.evaluate(self.distance_image,self.W[i,:])
             if self.best_cost > self.C[i]:
@@ -67,6 +68,7 @@ class PatternPosePopulation(population_search.Population):
         '''
         #generate array of random -1 to 1, in shape of W
         mutations = np.random.choice([-1., 0., 1.], self.W.shape)
+        #mutations = np.random.choice([-1., 0., 1.], self.W.shape, p=[1/3, 1/3, 1/3])
         #convert theta column to radians
         mutations[:,2] *= np.pi/180
         self.W += mutations         
@@ -129,7 +131,7 @@ def test_particle_filter_search(generation,individuals, IndexPattern, times):
     region = (xs-20, xs+20, ys-20, ys+20)
     scale = pose_list[ipat][3]
         
-    pop_size=individuals
+    pop_size=population
     W = initial_population(region, scale , pop_size)
     
     pop = PatternPosePopulation(W, pat)
@@ -161,7 +163,7 @@ def test_particle_filter_search(generation,individuals, IndexPattern, times):
                       pose_list, 
                       pat,
                       Lw)
-    os.rename('out', str(times)+'_'+ str(IndexPattern)+'_'+str(generation)+'_'+str(individuals)) 
+    os.rename('out', str(times)+'_'+ str(IndexPattern)+'_'+str(generation)+'_'+str(population)) 
     
 #------------------------------------------------------------------------------        
 
@@ -170,160 +172,22 @@ if __name__=='__main__':
     
     Reverse_flag = False    
  
-    generation1 =200
-    individuals1= 5 
-    # the 1st option: 200 generation for a population of 5 individuals 
-    generation2 =8
-    individuals2 = 125 # the 2nd option: 8 generation for a population of 125 individuals 
     
-    generation3 =20
-    individuals3 = 50  # the 3rd option: 20 generation for a population of 50 individuals 
-    
-    generation4 =25
-    individuals4 = 40  # the 4th option: 25 generation for a population of 40 individuals 
+   # for i  in range(1, 3):
+   #     print (str(i) + ':' + str(IndexPattern) + ':'+ str(population) + 'x' + str(generation))
+   #     test_particle_filter_search(generation,population, IndexPattern,i)
 
-
-# reverse 
-    generation_r1 =5
-    individuals_r1= 200 
+    pop = [100,200,300,400,500]
+    gen = [100,200,300,400,500]
     
-    generation_r2 =125
-    individuals_r2 = 8 
-    
-    generation_r3 =50
-    individuals_r3 = 20 
-    
-    generation_r4 =40
-    individuals_r4 = 25 
-
-
 #############################################################################################
-   
- 
-    
-    if Reverse_flag is False : 
-        print ('Reverse_flag is false')        
-         
-        IndexPattern =0
-        for i in range(10):
-           test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
-    '''  
-        for i in range(10):
-            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
-            
-        for i in range(10):  
-             test_particle_filter_search(generation3,individuals3, IndexPattern,i)  
-             
-        for i in range(10): 
-            test_particle_filter_search(generation4,individuals4, IndexPattern,i)  
-        
-        IndexPattern =1
-        for i in range(10): 
-            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
-        
-        for i in range(10): 
-            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
-        
-        for i in range(10): 
-           test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
-        
-        for i in range(10): 
-           test_particle_filter_search(generation4,individuals4, IndexPattern,i) 
+    for pi in range(4):
+        for ipop in range (len(pop)):  
+            for igen in range(len(gen)):    
+                for i  in range(1, 11):
+                    print (str(i) + ':' + str(pi) + ':'+ str(pop[ipop]) + 'x' + str(gen[igen]))
+                    #test_particle_filter_search(gen[igen],pop[ipop], pi,i)
 
-    
-        IndexPattern =2
-    
-        for i in range(10): 
-            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
-        
-        for i in range(10): 
-            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
-        
-        for i in range(10): 
-            test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
-        
-        for i in range(10): 
-            test_particle_filter_search(generation4,individuals4, IndexPattern,i)      
-    
-      
-        IndexPattern =3
-    
-        for i in range(10): 
-            test_particle_filter_search(generation1,individuals1, IndexPattern,i)  
-        
-        for i in range(10): 
-            test_particle_filter_search(generation2,individuals2, IndexPattern,i)  
-        
-        for i in range(10): 
-            test_particle_filter_search(generation3,individuals3, IndexPattern,i) 
-        
-        for i in range(10): 
-            test_particle_filter_search(generation4,individuals4, IndexPattern,i)
-    '''
-    
-############################################################################################
-
-    if Reverse_flag is True:
-        print ('Reverse_flag is true')
- 
-
-        IndexPattern =0
-
-        for i in range(10):    
-            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
-    
-        for i in range(10):    
-            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
-        
-        for i in range(10):    
-             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)
-    
-    
-        IndexPattern =1
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
-        
-        for i in range(10):    
-             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)   
-
-        IndexPattern =2
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
-        
-        for i in range(10):    
-             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i) 
-
-    
-        IndexPattern =3
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r1,individuals_r1, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r2,individuals_r2, IndexPattern,i)  
-        
-        for i in range(10):    
-            test_particle_filter_search(generation_r3,individuals_r3, IndexPattern,i)  
-        
-        for i in range(10):    
-             test_particle_filter_search(generation_r4,individuals_r4, IndexPattern,i)
    
     
 #############################################################################################
