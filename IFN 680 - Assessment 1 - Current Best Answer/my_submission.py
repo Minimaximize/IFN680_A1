@@ -175,6 +175,12 @@ def test_particle_filter_search(generation,individuals, IndexPattern, times):
                       pose_list, 
                       pat,
                       pop.best_w)
+
+#    with open('out'+str(generation)+'x'+str(individuals)+'.csv', 'r+') as out:
+#        out.write('times, Pattern, generation, population, Best Cost, Best W \n')
+    
+    with open('out'+str(generation)+'x'+str(individuals)+'.csv', 'a') as out:
+        out.write(str(times)+','+str(IndexPattern)+','+str(generation)+','+str(individuals)+','+str(pop.best_cost)+','+str(pop.best_w)+'\n')
                       
 #    pattern_utils.replay_search(pat_list, 
 #                      pose_list, 
@@ -195,8 +201,8 @@ if __name__=='__main__':
    #     print (str(i) + ':' + str(IndexPattern) + ':'+ str(population) + 'x' + str(generation))
    #     test_particle_filter_search(generation,population, IndexPattern,i)
 
-    pop = [100]#,200,300,400,500] # Table of Populations to compare
-    gen = [100]#,200,300,400,500] # Table of Generations to compare
+    pop = [10]#,200,300,400,500] # Table of Populations to compare
+    gen = [10]#,200,300,400,500] # Table of Generations to compare
     
 #############################################################################################
     for pi in range(2):
