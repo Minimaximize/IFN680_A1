@@ -39,6 +39,7 @@ class Population(object):
         self.C = np.zeros((self.n,)) # self.C[i] is the cost of the ith individual
         self.temperature = 1.0
         self.best_cost = np.inf # cost of the best individual seen so far
+        
             
     def mutate(self):
         '''
