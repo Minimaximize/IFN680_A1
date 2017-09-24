@@ -179,7 +179,7 @@ def test_particle_filter_search(generation,individuals, IndexPattern, times):
 #    with open('out'+str(generation)+'x'+str(individuals)+'.csv', 'r+') as out:
 #        out.write('times, Pattern, generation, population, Best Cost, Best W \n')
     
-    with open('out'+str(generation)+'x'+str(individuals)+'.csv', 'a') as out:
+    with open(FILENAME+'.csv', 'a') as out: #+str(generation)+'x'+str(individuals)+'
         out.write(str(times)+','+str(IndexPattern)+','+str(generation)+','+str(individuals)+','+str(pop.best_cost)+','+str(pop.best_w)+'\n')
                       
 #    pattern_utils.replay_search(pat_list, 
@@ -191,6 +191,9 @@ def test_particle_filter_search(generation,individuals, IndexPattern, times):
     
 #------------------------------------------------------------------------------        
 
+# Allow FILENAME to be accessed globally
+FILENAME = 'output'
+
 if __name__=='__main__':
     
     
@@ -199,13 +202,25 @@ if __name__=='__main__':
     
    # for i  in range(1, 3):
    #     print (str(i) + ':' + str(IndexPattern) + ':'+ str(population) + 'x' + str(generation))
-   #     test_particle_filter_search(generation,population, IndexPattern,i)
+#test_particle_filter_search(40,30, 1,0)
 
-    pop = [10]#,200,300,400,500] # Table of Populations to compare
-    gen = [10]#,200,300,400,500] # Table of Generations to compare
+    pop = [40]#,50,60,70] # Table of Populations to compare
+    gen = [40]#,50,60,70] # Table of Generations to compare
     
+    #Iterate through filenames to prevent fileoverwriting
+    fileIndex = 0
+    while os.path.exists(FILENAME+'_%s.csv'%fileIndex):
+        fileIndex+=1
+        
+    # Set Filename to clear filename
+    FILENAME +='_'+str(fileIndex)
+    
+    #create new file to write to or clears old file
+    with open(FILENAME+'.csv', 'w') as out:
+        out.write('')
+
 #############################################################################################
-    for pi in range(2):
+    for pi in range(4):
         for ipop in range (len(pop)):  
             for igen in range(len(gen)):    
                 for i  in range(1, 11):
